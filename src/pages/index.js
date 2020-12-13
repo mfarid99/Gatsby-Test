@@ -1,15 +1,38 @@
 import React from "react"
 import { Link } from "gatsby"
+import { useStaticQuery, graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
 
-const IndexPage = () => (
+
+
+
+const IndexPage = () => {
+  
+  const { allMarkdownRemark } = useStaticQuery(
+    graphql`
+      query {
+        allMarkdownRemark {
+          nodes {
+            frontmatter {
+              Title
+            }
+            html
+          }
+        }
+      }
+    `
+  )
+  
+  console.log(allMarkdownRemark)
+
+  return (
   <Layout>
     <SEO title="Home" />
     <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
+    <p>Welcome to your new Gatsby site.{allMarkdownRemark.nodes[0].frontmatter.Title}</p>
     <p>Now go build something great.</p>
     <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
       <Image />
@@ -17,6 +40,6 @@ const IndexPage = () => (
     <Link to="/page-2/">Go to page 2</Link> <br />
     <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
   </Layout>
-)
+)}
 
 export default IndexPage
